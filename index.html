@@ -450,6 +450,26 @@
   .tc-again{background:linear-gradient(135deg, var(--gold), var(--gold-2)); color:#1a1206;}
   .tc-share{background:var(--card); color:var(--ink); border:1px solid var(--card-border) !important;}
 
+  /* ---------- Leaderboard ---------- */
+  .lb-tabs{display:flex; gap:6px; margin-bottom:12px;}
+  .lb-tab{
+    flex:1; padding:8px; border-radius:10px; border:1px solid var(--card-border);
+    background:var(--card); color:var(--ink-dim); font-family:'Vazirmatn',sans-serif; font-weight:700;
+    font-size:12px; cursor:pointer;
+  }
+  .lb-tab.active{background:linear-gradient(135deg, var(--gold), var(--gold-2)); color:#1a1206; border-color:transparent;}
+  .lb-list{max-height:340px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;}
+  .lb-row{
+    display:flex; align-items:center; gap:10px; padding:9px 12px;
+    background:var(--card); border:1px solid var(--card-border); border-radius:12px;
+  }
+  .lb-row.me{border-color:var(--gold);}
+  .lb-rank{font-weight:800; font-size:13px; width:22px; text-align:center; color:var(--ink-dim);}
+  .lb-name{flex:1; font-weight:700; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .lb-score{font-weight:800; font-size:13px; color:var(--gold); direction:ltr;}
+  .lb-empty{text-align:center; color:var(--ink-dim); font-size:12.5px; padding:30px 10px;}
+  .lb-loading{text-align:center; color:var(--ink-dim); font-size:12.5px; padding:30px 10px;}
+
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important; transition:none !important;}
   }
@@ -486,6 +506,7 @@
   <div class="app-header">
     <div class="brand"><span class="dot"></span> چالش پنالتی</div>
     <div class="header-right">
+      <button class="icon-btn" id="btnLeaderboard" title="برترین‌ها">🏆</button>
       <button class="icon-btn" id="btnSettings" title="تنظیمات">⚙️</button>
       <div class="mode-switch">
         <button id="btnModeShoot" class="active">زدن ⚽</button>
@@ -682,6 +703,21 @@
   </div>
 </div>
 
+<!-- لیدربورد عمومی -->
+<div class="modal-backdrop" id="lbBackdrop">
+  <div class="modal-sheet">
+    <div class="modal-title">🏆 برترین‌های چالش پنالتی <span></span></div>
+    <div class="lb-tabs">
+      <button class="lb-tab active" id="lbTabShoot">⚽ زدن پنالتی</button>
+      <button class="lb-tab" id="lbTabSave">🧤 گرفتن پنالتی</button>
+    </div>
+    <div class="lb-list" id="lbList">
+      <div class="lb-loading">در حال بارگذاری...</div>
+    </div>
+    <button class="close-sheet-btn" id="closeLbBtn">بستن</button>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -692,6 +728,34 @@
     tg.expand();
     try { tg.setHeaderColor('#0c1120'); } catch(e){}
     try { tg.setBackgroundColor('#05070d'); } catch(e){}
+  }
+
+  // ---------------- تنظیم لیدربورد (بعد از دیپلوی، آدرس رو اینجا جایگزین کن) ----------------
+  var LEADERBOARD_API = "https://script.google.com/macros/s/AKfycbytTFQTc_zKiYxek8rzCvtixt_FLzyRvKGCFqIbCDa-dr0stt3dkJAuyrwo6TPaR21_/exec";
+  var leaderboardEnabled = LEADERBOARD_API.indexOf("http") === 0;
+
+  // هویت بازیکن از تلگرام (بدون نیاز به ورود دستی)
+  var tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+  var myUserId = tgUser ? String(tgUser.id) : null;
+  var myDisplayName = tgUser ? (tgUser.username ? ("@" + tgUser.username) : tgUser.first_name) : null;
+  if (!myUserId){
+    // برای تست خارج از تلگرام: یه شناسه‌ی مهمان ثابت روی همین مرورگر بساز
+    myUserId = localStorage.getItem("pk_guest_id");
+    if (!myUserId){
+      myUserId = "guest_" + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem("pk_guest_id", myUserId);
+    }
+    myDisplayName = "میهمان";
+  }
+
+  function submitScore(mode, score, streak){
+    if (!leaderboardEnabled) return;
+    try{
+      fetch(LEADERBOARD_API, {
+        method: "POST",
+        body: JSON.stringify({ userId: myUserId, name: myDisplayName, mode: mode, score: score, streak: streak })
+      }).catch(function(){});
+    }catch(e){}
   }
 
   // شب/روز تصادفی برای تنوع بصری
@@ -855,6 +919,13 @@
   var tcSub = $("tcSub");
   var tcAgain = $("tcAgain");
   var tcShare = $("tcShare");
+  var btnLeaderboard = $("btnLeaderboard");
+  var lbBackdrop = $("lbBackdrop");
+  var closeLbBtn = $("closeLbBtn");
+  var lbTabShoot = $("lbTabShoot");
+  var lbTabSave = $("lbTabSave");
+  var lbList = $("lbList");
+  var lbCurrentMode = "shoot";
 
   var ACHIEVEMENTS = [
     {n:5,  icon:"🥉", title:"مدال برنزی!", sub:"۵ برد پیاپی"},
@@ -1028,7 +1099,7 @@
     }
     persistMode(mode);
     renderScoreboard();
-    if (won) bumpScore();
+    if (won){ bumpScore(); submitScore(mode, d.score, d.best); }
 
     var title, sub, cls;
     if (mode === "shoot"){
@@ -1264,6 +1335,62 @@
     }
     doReset(window.confirm("امتیاز و رکورد این حالت صفر بشه؟"));
   });
+
+  // ---------------- لیدربورد عمومی ----------------
+  function renderLeaderboard(rows){
+    if (!leaderboardEnabled){
+      lbList.innerHTML = '<div class="lb-empty">لیدربورد هنوز راه‌اندازی نشده.</div>';
+      return;
+    }
+    if (!rows || rows.length === 0){
+      lbList.innerHTML = '<div class="lb-empty">هنوز کسی امتیاز ثبت نکرده! اولین نفر باش 🚀</div>';
+      return;
+    }
+    var medals = ["🥇","🥈","🥉"];
+    var html = rows.map(function(r, i){
+      var isMe = myDisplayName && r.name === myDisplayName;
+      var rankHtml = i < 3 ? medals[i] : (i+1);
+      return '<div class="lb-row' + (isMe ? ' me' : '') + '">' +
+        '<div class="lb-rank">' + rankHtml + '</div>' +
+        '<div class="lb-name"><bdi>' + escapeHtml(r.name) + '</bdi></div>' +
+        '<div class="lb-score">' + r.score + '</div>' +
+      '</div>';
+    }).join("");
+    lbList.innerHTML = html;
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function loadLeaderboard(mode){
+    lbList.innerHTML = '<div class="lb-loading">در حال بارگذاری...</div>';
+    if (!leaderboardEnabled){ renderLeaderboard(null); return; }
+    fetch(LEADERBOARD_API + "?mode=" + mode)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data && data.ok) renderLeaderboard(data.leaderboard);
+        else lbList.innerHTML = '<div class="lb-empty">خطا در دریافت اطلاعات</div>';
+      })
+      .catch(function(){
+        lbList.innerHTML = '<div class="lb-empty">اتصال برقرار نشد، دوباره امتحان کن</div>';
+      });
+  }
+  function setLbTab(mode){
+    lbCurrentMode = mode;
+    lbTabShoot.classList.toggle("active", mode === "shoot");
+    lbTabSave.classList.toggle("active", mode === "save");
+    loadLeaderboard(mode);
+  }
+  btnLeaderboard.addEventListener("click", function(){
+    lbBackdrop.classList.add("show");
+    haptic("selection");
+    setLbTab(lbCurrentMode);
+  });
+  closeLbBtn.addEventListener("click", function(){ lbBackdrop.classList.remove("show"); });
+  lbBackdrop.addEventListener("click", function(e){ if (e.target === lbBackdrop) lbBackdrop.classList.remove("show"); });
+  lbTabShoot.addEventListener("click", function(){ setLbTab("shoot"); });
+  lbTabSave.addEventListener("click", function(){ setLbTab("save"); });
 
   // ---------------- Init ----------------
   loadSettings();
