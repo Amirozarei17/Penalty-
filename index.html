@@ -48,7 +48,7 @@
   /* ---------- Header ---------- */
   .app-header{
     display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:14px;
+    margin-bottom:14px; gap:8px;
   }
   .brand{
     display:flex; align-items:center; gap:8px;
@@ -60,6 +60,13 @@
     background:radial-gradient(circle at 35% 30%, #fff2c0, var(--gold) 55%, var(--gold-2) 100%);
     box-shadow:0 0 12px rgba(255,201,60,.8);
   }
+  .header-right{display:flex; align-items:center; gap:8px;}
+  .icon-btn{
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--card-border);
+    background:var(--card); color:var(--ink); font-size:15px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+  }
+  .icon-btn:active{transform:scale(.9);}
   .mode-switch{
     display:flex; background:var(--card); border:1px solid var(--card-border);
     border-radius:999px; padding:4px; gap:2px;
@@ -318,6 +325,131 @@
     --pitch-dark:#060d09; --pitch-light:#0b2015;
   }
 
+  /* ---------- Team themes ---------- */
+  body.theme-esteghlal{ --gold:#3aa0ff; --gold-2:#0d5fc9; --gold-dim:#1a5faa; }
+  body.theme-persepolis{ --gold:#ff4d4d; --gold-2:#c11414; --gold-dim:#a52822; }
+
+  /* ---------- Progress to next medal ---------- */
+  .medal-progress{
+    margin:2px 0 14px; background:var(--card); border:1px solid var(--card-border);
+    border-radius:14px; padding:10px 14px;
+  }
+  .medal-progress .mp-top{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; color:var(--ink-dim); font-weight:700; margin-bottom:6px;
+  }
+  .medal-progress .mp-top b{color:var(--ink); font-weight:700;}
+  .mp-bar{height:7px; border-radius:99px; background:#0e1424; overflow:hidden;}
+  .mp-fill{
+    height:100%; border-radius:99px;
+    background:linear-gradient(90deg, var(--gold), var(--gold-2));
+    transition:width .5s cubic-bezier(.2,.65,.3,1);
+  }
+
+  /* ---------- Commentary ---------- */
+  .commentary{
+    text-align:center; font-size:12px; color:var(--ink-dim); font-weight:700;
+    margin-top:6px; min-height:16px;
+  }
+
+  /* ---------- Settings modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(2,4,10,.72); backdrop-filter:blur(3px);
+    z-index:80; display:flex; align-items:flex-end; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .modal-backdrop.show{opacity:1; pointer-events:auto;}
+  .modal-sheet{
+    width:100%; max-width:480px; background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    border:1px solid var(--card-border); border-bottom:none;
+    border-radius:22px 22px 0 0; padding:18px 18px 26px;
+    transform:translateY(30px); transition:transform .3s cubic-bezier(.22,1,.36,1);
+  }
+  .modal-backdrop.show .modal-sheet{transform:translateY(0);}
+  .modal-title{
+    font-family:'Sora',sans-serif; font-weight:800; font-size:16px; margin-bottom:14px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .settings-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 4px; border-bottom:1px solid var(--card-border);
+    font-size:13.5px; font-weight:700;
+  }
+  .settings-row:last-of-type{border-bottom:none;}
+  .toggle{
+    width:44px; height:26px; border-radius:99px; background:#0e1424;
+    border:1px solid var(--card-border); position:relative; cursor:pointer; flex-shrink:0;
+  }
+  .toggle.on{background:linear-gradient(90deg, var(--gold), var(--gold-2)); border-color:transparent;}
+  .toggle .knob{
+    position:absolute; top:2px; right:2px; width:20px; height:20px; border-radius:50%;
+    background:#fff; transition:transform .2s ease;
+  }
+  .toggle.on .knob{transform:translateX(-18px);}
+  .theme-swatches{display:flex; gap:10px; margin-top:4px;}
+  .swatch{
+    width:34px; height:34px; border-radius:50%; cursor:pointer;
+    border:2px solid transparent;
+  }
+  .swatch.active{border-color:#fff;}
+  .swatch.gold{background:linear-gradient(135deg,#ffc93c,#ff9f1c);}
+  .swatch.esteghlal{background:linear-gradient(135deg,#3aa0ff,#0d5fc9);}
+  .swatch.persepolis{background:linear-gradient(135deg,#ff4d4d,#c11414);}
+  .reset-btn{
+    width:100%; margin-top:14px; padding:12px; border:1px solid #4a2020; border-radius:12px;
+    background:#1e1114; color:#ff8080; font-family:'Vazirmatn',sans-serif; font-weight:700;
+    font-size:13px; cursor:pointer;
+  }
+  .close-sheet-btn{
+    width:100%; margin-top:10px; padding:12px; border:none; border-radius:12px;
+    background:var(--card); color:var(--ink-dim); font-family:'Vazirmatn',sans-serif; font-weight:700;
+    font-size:13px; cursor:pointer; border:1px solid var(--card-border);
+  }
+
+  /* ---------- Tournament mode ---------- */
+  .tourney-btn{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    margin:0 0 14px; padding:10px; width:100%;
+    background:linear-gradient(135deg, #1c2440, #121933); border:1px solid var(--card-border);
+    border-radius:14px; color:var(--ink); font-family:'Vazirmatn',sans-serif; font-weight:700;
+    font-size:12.5px; cursor:pointer;
+  }
+  .tourney-btn:active{transform:scale(.97);}
+  .tourney-progress{
+    display:flex; gap:6px; justify-content:center; margin-top:10px;
+  }
+  .tourney-dot{
+    width:14px; height:14px; border-radius:50%; background:#232b47; border:1px solid var(--card-border);
+  }
+  .tourney-dot.hit{background:var(--win); border-color:var(--win);}
+  .tourney-dot.miss{background:var(--lose); border-color:var(--lose);}
+  .tourney-result{
+    position:fixed; inset:0; z-index:90; background:rgba(2,4,10,.88); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .tourney-result.show{opacity:1; pointer-events:auto;}
+  .tourney-card{
+    background:linear-gradient(160deg, var(--card), #10152a); border:1px solid var(--card-border);
+    border-radius:22px; padding:28px 26px; text-align:center; max-width:320px;
+    transform:scale(.9); transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .tourney-result.show .tourney-card{transform:scale(1);}
+  .tourney-card .tc-title{font-size:13px; color:var(--ink-dim); font-weight:700;}
+  .tourney-card .tc-score{
+    font-family:'Sora',sans-serif; font-weight:800; font-size:48px; margin:8px 0;
+    background:linear-gradient(180deg,#fff, var(--gold) 60%, var(--gold-2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .tourney-card .tc-sub{font-size:12.5px; color:var(--ink-dim); margin-bottom:18px;}
+  .tourney-card .tc-actions{display:flex; gap:8px;}
+  .tourney-card button{
+    flex:1; padding:11px; border-radius:12px; border:none; cursor:pointer;
+    font-family:'Vazirmatn',sans-serif; font-weight:700; font-size:12.5px;
+  }
+  .tc-again{background:linear-gradient(135deg, var(--gold), var(--gold-2)); color:#1a1206;}
+  .tc-share{background:var(--card); color:var(--ink); border:1px solid var(--card-border) !important;}
+
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important; transition:none !important;}
   }
@@ -353,9 +485,12 @@
 <div class="app">
   <div class="app-header">
     <div class="brand"><span class="dot"></span> چالش پنالتی</div>
-    <div class="mode-switch">
-      <button id="btnModeShoot" class="active">زدن ⚽</button>
-      <button id="btnModeSave">گرفتن 🧤</button>
+    <div class="header-right">
+      <button class="icon-btn" id="btnSettings" title="تنظیمات">⚙️</button>
+      <div class="mode-switch">
+        <button id="btnModeShoot" class="active">زدن ⚽</button>
+        <button id="btnModeSave">گرفتن 🧤</button>
+      </div>
     </div>
   </div>
 
@@ -375,6 +510,13 @@
       </div>
     </div>
   </div>
+
+  <div class="medal-progress">
+    <div class="mp-top"><span>پیشرفت تا مدال بعدی</span><b id="mpLabel">۵ برد پیاپی</b></div>
+    <div class="mp-bar"><div class="mp-fill" id="mpFill" style="width:0%"></div></div>
+  </div>
+
+  <button class="tourney-btn" id="tourneyBtn">🏁 حالت مسابقه‌ای (۵ ضربه پشت‌سرهم)</button>
 
   <div class="pitch-wrap">
     <div class="stripes"></div>
@@ -479,7 +621,10 @@
       <button class="zone-btn enabled" data-zone="center"><span class="arrow">⏺️</span>وسط</button>
       <button class="zone-btn enabled" data-zone="left"><span class="arrow">⬅️</span>چپ</button>
     </div>
+    <div class="tourney-progress" id="tourneyProgress" style="display:none"></div>
   </div>
+
+  <div class="commentary" id="commentary"></div>
 
   <div class="footer-hint">امتیازت به‌صورت خودکار روی حساب تلگرامت ذخیره می‌شه</div>
   <button class="share-btn" id="shareBtn">🔗 اشتراک‌گذاری امتیاز</button>
@@ -497,6 +642,44 @@
 <div class="result-banner" id="resultBanner">
   <div class="title" id="resultTitle">GOAL!</div>
   <div class="sub" id="resultSub">امتیاز: 1</div>
+</div>
+
+<!-- پنل تنظیمات -->
+<div class="modal-backdrop" id="settingsBackdrop">
+  <div class="modal-sheet">
+    <div class="modal-title">⚙️ تنظیمات <span></span></div>
+    <div class="settings-row">
+      <span>🔊 صدای بازی</span>
+      <div class="toggle on" id="toggleSound"><div class="knob"></div></div>
+    </div>
+    <div class="settings-row">
+      <span>📳 لرزش گوشی</span>
+      <div class="toggle on" id="toggleVibrate"><div class="knob"></div></div>
+    </div>
+    <div class="settings-row" style="display:block;">
+      <span>🎨 تم رنگی</span>
+      <div class="theme-swatches">
+        <div class="swatch gold active" data-theme=""></div>
+        <div class="swatch esteghlal" data-theme="theme-esteghlal"></div>
+        <div class="swatch persepolis" data-theme="theme-persepolis"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetScoreBtn">🗑 ریست کردن امتیاز این حالت</button>
+    <button class="close-sheet-btn" id="closeSettingsBtn">بستن</button>
+  </div>
+</div>
+
+<!-- نتیجه‌ی حالت مسابقه‌ای -->
+<div class="tourney-result" id="tourneyResult">
+  <div class="tourney-card">
+    <div class="tc-title">نتیجه‌ی مسابقه</div>
+    <div class="tc-score" id="tcScore">3/5</div>
+    <div class="tc-sub" id="tcSub">عملکرد خوبی داشتی!</div>
+    <div class="tc-actions">
+      <button class="tc-again" id="tcAgain">تلاش دوباره</button>
+      <button class="tc-share" id="tcShare">اشتراک‌گذاری</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -521,12 +704,43 @@
   }, 900);
 
   function haptic(type, style){
+    if (!settings.vibrate) return;
+    if (navigator.vibrate){
+      try{
+        if (type === 'impact') navigator.vibrate(style === 'heavy' ? 30 : 15);
+        if (type === 'notification') navigator.vibrate(style === 'success' ? [20,40,20] : 40);
+        if (type === 'selection') navigator.vibrate(8);
+      }catch(e){}
+    }
     if (!tg || !tg.HapticFeedback) return;
     try{
       if (type === 'impact') tg.HapticFeedback.impactOccurred(style || 'medium');
       if (type === 'notification') tg.HapticFeedback.notificationOccurred(style || 'success');
       if (type === 'selection') tg.HapticFeedback.selectionChanged();
     }catch(e){}
+  }
+
+  // ---------------- تنظیمات (صدا/لرزش/تم) ----------------
+  var settings = {sound:true, vibrate:true, theme:""};
+  function applyTheme(theme){
+    document.body.classList.remove("theme-esteghlal","theme-persepolis");
+    if (theme) document.body.classList.add(theme);
+    document.querySelectorAll(".swatch").forEach(function(s){
+      s.classList.toggle("active", s.getAttribute("data-theme") === theme);
+    });
+  }
+  function loadSettings(){
+    storageGet("pk_settings", function(raw){
+      if (raw){
+        try{ var s = JSON.parse(raw); settings.sound = s.sound !== false; settings.vibrate = s.vibrate !== false; settings.theme = s.theme || ""; }catch(e){}
+      }
+      document.getElementById("toggleSound").classList.toggle("on", settings.sound);
+      document.getElementById("toggleVibrate").classList.toggle("on", settings.vibrate);
+      applyTheme(settings.theme);
+    });
+  }
+  function saveSettings(){
+    storageSet("pk_settings", JSON.stringify(settings));
   }
 
   // ---------------- صداهای ساخته‌شده با Web Audio (بدون فایل خارجی) ----------------
@@ -538,6 +752,7 @@
     return actx || null;
   }
   function tone(freq, dur, type, startGain){
+    if (!settings.sound) return;
     var ctx = getCtx();
     if (!ctx) return;
     var osc = ctx.createOscillator();
@@ -590,6 +805,7 @@
     },
     busy:false
   };
+  var tourney = {active:false, index:0, hits:[]};
 
   function loadMode(mode){
     storageGet("pk_" + mode, function(raw){
@@ -623,6 +839,22 @@
   var achvIcon = $("achvIcon");
   var achvTitle = $("achvTitle");
   var achvSub = $("achvSub");
+  var mpLabel = $("mpLabel");
+  var mpFill = $("mpFill");
+  var commentaryEl = $("commentary");
+  var btnSettings = $("btnSettings");
+  var settingsBackdrop = $("settingsBackdrop");
+  var closeSettingsBtn = $("closeSettingsBtn");
+  var toggleSound = $("toggleSound");
+  var toggleVibrate = $("toggleVibrate");
+  var resetScoreBtn = $("resetScoreBtn");
+  var tourneyBtn = $("tourneyBtn");
+  var tourneyProgress = $("tourneyProgress");
+  var tourneyResult = $("tourneyResult");
+  var tcScore = $("tcScore");
+  var tcSub = $("tcSub");
+  var tcAgain = $("tcAgain");
+  var tcShare = $("tcShare");
 
   var ACHIEVEMENTS = [
     {n:5,  icon:"🥉", title:"مدال برنزی!", sub:"۵ برد پیاپی"},
@@ -643,6 +875,43 @@
     setTimeout(function(){ achvBanner.classList.remove("show"); }, 1900);
   }
 
+  function updateMedalProgress(){
+    var streak = state.data[state.mode].streak;
+    var next = ACHIEVEMENTS.filter(function(a){ return a.n > streak; })[0];
+    var prev = ACHIEVEMENTS.filter(function(a){ return a.n <= streak; }).pop();
+    var prevN = prev ? prev.n : 0;
+    if (!next){
+      mpLabel.textContent = "همه‌ی مدال‌ها گرفته شد! 👑";
+      mpFill.style.width = "100%";
+      return;
+    }
+    var pct = ((streak - prevN) / (next.n - prevN)) * 100;
+    mpFill.style.width = Math.max(pct, 4) + "%";
+    mpLabel.textContent = (next.n - streak) + " برد تا " + next.icon + " " + next.title.replace("!","");
+  }
+
+  var COMMENTARY_WIN_SHOOT = [
+    "چه ضربه‌ای بود! 🔥", "دروازه‌بان اصلاً نفهمید چی شد!", "این یکی حرف نداشت ⚽",
+    "گلی به این زیبایی کم دیده بودیم!", "پایِ طلایی امشب فرم داره!"
+  ];
+  var COMMENTARY_LOSE_SHOOT = [
+    "دروازه‌بان امشب فرم نداره... برای تو!", "نزدیک بود! دفعه‌ی بعد قطعاً گل می‌شه",
+    "دروازه‌بان جهتت رو خوند 🧤", "یه‌کم شانس نیاوردی، ادامه بده!"
+  ];
+  var COMMENTARY_WIN_SAVE = [
+    "چه واکنشی! دروازه‌بان حرفه‌ای شدی 🧤", "سیوی افسانه‌ای!", "دستکش‌های طلایی امشب همرات هستن",
+    "هیچ توپی از این دروازه رد نمی‌شه!"
+  ];
+  var COMMENTARY_LOSE_SAVE = [
+    "این یکی غیرقابل‌دفاع بود", "یه‌کم دیر جهت رو انتخاب کردی", "دفعه‌ی بعد می‌گیریش، نگران نباش",
+    "زننده خیلی حرفه‌ای بود این‌بار"
+  ];
+  function showCommentary(mode, won){
+    var pool = mode === "shoot" ? (won ? COMMENTARY_WIN_SHOOT : COMMENTARY_LOSE_SHOOT)
+                                 : (won ? COMMENTARY_WIN_SAVE : COMMENTARY_LOSE_SAVE);
+    commentaryEl.textContent = pool[Math.floor(Math.random() * pool.length)];
+  }
+
   function renderScoreboard(){
     var d = state.data[state.mode];
     var scoreStr = String(d.score);
@@ -654,6 +923,7 @@
     promptLabel.textContent = state.mode === "shoot"
       ? "جهت ضربه‌ات رو انتخاب کن"
       : "جهت شیرجه‌ات رو انتخاب کن";
+    updateMedalProgress();
   }
 
   function bumpScore(){
@@ -666,7 +936,7 @@
   }
 
   function setMode(mode){
-    if (state.busy) return;
+    if (state.busy || tourney.active) return;
     state.mode = mode;
     btnModeShoot.classList.toggle("active", mode === "shoot");
     btnModeSave.classList.toggle("active", mode === "save");
@@ -736,7 +1006,11 @@
       } else {
         ball.className = "ball pos-" + shotZone;
       }
-      finishRound(mode, won, result);
+      if (tourney.active){
+        finishTourneyRound(mode, won, result);
+      } else {
+        finishRound(mode, won, result);
+      }
     }, 560);
   }
 
@@ -768,6 +1042,7 @@
     resultTitle.className = "title " + cls;
     resultSub.textContent = sub;
     resultBanner.classList.add("show");
+    showCommentary(mode, won);
 
     haptic("notification", won ? "success" : "error");
     if (won){ burstConfetti(); soundGoal(); }
@@ -782,6 +1057,85 @@
         state.busy = false;
       }, 260);
     }, 1100);
+  }
+
+  // ---------------- حالت مسابقه‌ای (۵ ضربه) ----------------
+  function startTourney(){
+    if (state.busy) return;
+    tourney = {active:true, index:0, hits:[]};
+    tourneyBtn.disabled = true;
+    btnModeShoot.disabled = true;
+    btnModeSave.disabled = true;
+    tourneyProgress.style.display = "flex";
+    tourneyProgress.innerHTML = "";
+    for (var i = 0; i < 5; i++){
+      var dot = document.createElement("div");
+      dot.className = "tourney-dot";
+      tourneyProgress.appendChild(dot);
+    }
+    resetScene();
+    haptic("selection");
+  }
+  tourneyBtn.addEventListener("click", startTourney);
+
+  function endTourney(){
+    tourney.active = false;
+    tourneyBtn.disabled = false;
+    btnModeShoot.disabled = false;
+    btnModeSave.disabled = false;
+    tourneyProgress.style.display = "none";
+    var hitCount = tourney.hits.filter(Boolean).length;
+    tcScore.textContent = hitCount + "/5";
+    var subs = ["نتیجه ثبت شد!", "بار دیگه امتحان کن!", "می‌تونی بهتر از این باشی!"];
+    if (hitCount === 5) tcSub.textContent = "🔥 عالی بود، پنج از پنج!";
+    else if (hitCount >= 3) tcSub.textContent = "عملکرد خوبی داشتی!";
+    else tcSub.textContent = subs[Math.floor(Math.random()*subs.length)];
+    tourneyResult.classList.add("show");
+  }
+  tcAgain.addEventListener("click", function(){
+    tourneyResult.classList.remove("show");
+    startTourney();
+  });
+  tcShare.addEventListener("click", function(){
+    var hitCount = tourney.hits.filter(Boolean).length;
+    var modeLabel = state.mode === "shoot" ? "زدن پنالتی" : "گرفتن پنالتی";
+    shareText("🏁 توی حالت مسابقه‌ای " + modeLabel + " چالش پنالتی، " + hitCount +
+      " از ۵ تا رو موفق شدم! تو چند تا می‌گیری؟ 👇");
+  });
+
+  function finishTourneyRound(mode, won, result){
+    tourney.hits.push(won);
+    var dots = tourneyProgress.querySelectorAll(".tourney-dot");
+    var dot = dots[tourney.index];
+    if (dot) dot.classList.add(won ? "hit" : "miss");
+    tourney.index += 1;
+
+    var title, sub, cls;
+    if (mode === "shoot"){
+      if (result === "goal"){ title = "GOAL!"; cls = "win"; sub = "ضربه‌ی " + tourney.index + " از ۵"; }
+      else { title = "دفاع شد"; cls = "lose"; sub = "ضربه‌ی " + tourney.index + " از ۵"; }
+    } else {
+      if (result === "saved"){ title = "SAVE!"; cls = "win"; sub = "ضربه‌ی " + tourney.index + " از ۵"; }
+      else { title = "گل خوردیم"; cls = "lose"; sub = "ضربه‌ی " + tourney.index + " از ۵"; }
+    }
+    resultTitle.textContent = title;
+    resultTitle.className = "title " + cls;
+    resultSub.textContent = sub;
+    resultBanner.classList.add("show");
+    showCommentary(mode, won);
+
+    haptic("notification", won ? "success" : "error");
+    if (won){ burstConfetti(); soundGoal(); }
+    else { shakeScreen(); soundSave(); }
+
+    setTimeout(function(){
+      resultBanner.classList.remove("show");
+      setTimeout(function(){
+        resetScene();
+        state.busy = false;
+        if (tourney.index >= 5) endTourney();
+      }, 260);
+    }, 1000);
   }
 
   zoneButtons.forEach(function(btn){
@@ -850,11 +1204,7 @@
   requestAnimationFrame(tickConfetti);
 
   // ---------------- اشتراک‌گذاری امتیاز ----------------
-  shareBtn.addEventListener("click", function(){
-    var d = state.data[state.mode];
-    var modeLabel = state.mode === "shoot" ? "زدن پنالتی" : "گرفتن پنالتی";
-    var text = "⚽ توی چالش پنالتی، حالت " + modeLabel + " امتیاز " + d.score +
-      " گرفتم و رکورد پیاپیم " + d.best + " شد! تو هم امتحان کن 👇";
+  function shareText(text){
     var pageUrl = window.location.href;
     var shareUrl = "https://t.me/share/url?url=" + encodeURIComponent(pageUrl) +
       "&text=" + encodeURIComponent(text);
@@ -863,9 +1213,60 @@
       try{ tg.openTelegramLink(shareUrl); return; }catch(e){}
     }
     window.open(shareUrl, "_blank");
+  }
+  shareBtn.addEventListener("click", function(){
+    var d = state.data[state.mode];
+    var modeLabel = state.mode === "shoot" ? "زدن پنالتی" : "گرفتن پنالتی";
+    shareText("⚽ توی چالش پنالتی، حالت " + modeLabel + " امتیاز " + d.score +
+      " گرفتم و رکورد پیاپیم " + d.best + " شد! تو هم امتحان کن 👇");
+  });
+
+  // ---------------- پنل تنظیمات ----------------
+  btnSettings.addEventListener("click", function(){
+    settingsBackdrop.classList.add("show");
+    haptic("selection");
+  });
+  closeSettingsBtn.addEventListener("click", function(){
+    settingsBackdrop.classList.remove("show");
+  });
+  settingsBackdrop.addEventListener("click", function(e){
+    if (e.target === settingsBackdrop) settingsBackdrop.classList.remove("show");
+  });
+  toggleSound.addEventListener("click", function(){
+    settings.sound = !settings.sound;
+    toggleSound.classList.toggle("on", settings.sound);
+    saveSettings();
+    haptic("selection");
+  });
+  toggleVibrate.addEventListener("click", function(){
+    settings.vibrate = !settings.vibrate;
+    toggleVibrate.classList.toggle("on", settings.vibrate);
+    saveSettings();
+  });
+  document.querySelectorAll(".swatch").forEach(function(sw){
+    sw.addEventListener("click", function(){
+      settings.theme = sw.getAttribute("data-theme");
+      applyTheme(settings.theme);
+      saveSettings();
+      haptic("selection");
+    });
+  });
+  resetScoreBtn.addEventListener("click", function(){
+    var doReset = function(ok){
+      if (!ok) return;
+      state.data[state.mode] = {score:0, played:0, streak:0, best:0};
+      persistMode(state.mode);
+      renderScoreboard();
+      settingsBackdrop.classList.remove("show");
+    };
+    if (tg && tg.showConfirm){
+      try{ tg.showConfirm("امتیاز و رکورد این حالت صفر بشه؟", doReset); return; }catch(e){}
+    }
+    doReset(window.confirm("امتیاز و رکورد این حالت صفر بشه؟"));
   });
 
   // ---------------- Init ----------------
+  loadSettings();
   loadMode("shoot");
   loadMode("save");
   renderScoreboard();
