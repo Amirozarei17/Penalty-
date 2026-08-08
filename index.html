@@ -261,12 +261,92 @@
   }
   .creator-credit span{color:var(--gold); font-weight:700;}
 
+  /* ---------- Splash screen ---------- */
+  .splash{
+    position:fixed; inset:0; z-index:100;
+    background:radial-gradient(120% 80% at 50% 30%, var(--bg-2) 0%, var(--bg-0) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    transition:opacity .5s ease, visibility .5s;
+  }
+  .splash.hide{opacity:0; visibility:hidden; pointer-events:none;}
+  .splash-ball{
+    width:64px; height:64px;
+    animation:splashBounce 1s cubic-bezier(.5,0,.5,1) infinite;
+  }
+  .splash-ball svg{width:100%; height:100%;}
+  @keyframes splashBounce{
+    0%,100%{transform:translateY(0) scale(1);}
+    50%{transform:translateY(-22px) scale(1.02);}
+  }
+  .splash-title{
+    font-family:'Sora',sans-serif; font-weight:800; font-size:20px; color:var(--ink);
+    letter-spacing:.3px;
+  }
+  .splash-sub{color:var(--ink-dim); font-size:12px; font-weight:600;}
+
+  /* ---------- Share button ---------- */
+  .share-btn{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    margin:12px auto 0; padding:10px 18px; width:fit-content;
+    background:linear-gradient(135deg, #1c2440, #121933); border:1px solid var(--card-border);
+    border-radius:999px; color:var(--ink); font-family:'Vazirmatn',sans-serif; font-weight:700;
+    font-size:12.5px; cursor:pointer;
+  }
+  .share-btn:active{transform:scale(.95);}
+
+  /* ---------- Achievement badge ---------- */
+  .achv-banner{
+    position:fixed; left:50%; top:26%; transform:translate(-50%,-20px) scale(.85);
+    background:linear-gradient(160deg, #1e2a17, #0e1710);
+    border:1px solid #3a5a2a; border-radius:18px;
+    padding:14px 22px; text-align:center; display:flex; align-items:center; gap:12px;
+    opacity:0; pointer-events:none; z-index:60;
+    transition:opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 10px 30px -8px rgba(0,0,0,.6);
+  }
+  .achv-banner.show{opacity:1; transform:translate(-50%,0) scale(1);}
+  .achv-icon{font-size:30px; filter:drop-shadow(0 0 8px rgba(255,201,60,.7));}
+  .achv-text .t1{font-weight:800; color:var(--gold); font-size:14px;}
+  .achv-text .t2{font-weight:600; color:var(--ink-dim); font-size:11.5px; margin-top:2px;}
+
+  /* ---------- Camera zoom on kick ---------- */
+  .pitch-wrap{transition:transform .35s cubic-bezier(.2,.65,.3,1);}
+  .pitch-wrap.zoom{transform:scale(1.06);}
+
+  /* ---------- Night mode ---------- */
+  body.night{
+    --pitch-dark:#060d09; --pitch-light:#0b2015;
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important; transition:none !important;}
   }
 </style>
 </head>
 <body>
+
+<div class="splash" id="splash">
+  <div class="splash-ball">
+    <svg viewBox="0 0 40 40">
+      <defs>
+        <radialGradient id="splashBallGrad" cx="35%" cy="30%" r="75%">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset="55%" stop-color="#eef0f5"/>
+          <stop offset="100%" stop-color="#c9ced9"/>
+        </radialGradient>
+      </defs>
+      <circle cx="20" cy="20" r="18.5" fill="url(#splashBallGrad)" stroke="#aab0c0" stroke-width="1"/>
+      <g fill="#1c2030">
+        <polygon points="20,12 24.5,15.2 22.8,20.4 17.2,20.4 15.5,15.2"/>
+        <polygon points="8,17 12,15 12.8,19.8 9.4,23 6.2,20.5"/>
+        <polygon points="32,17 28,15 27.2,19.8 30.6,23 33.8,20.5"/>
+        <polygon points="14,31 18,27.5 22,27.5 26,31 20,35.5"/>
+      </g>
+    </svg>
+  </div>
+  <div class="splash-title">چالش پنالتی</div>
+  <div class="splash-sub">در حال آماده‌سازی زمین...</div>
+</div>
 
 <canvas id="confetti"></canvas>
 
@@ -336,23 +416,38 @@
         <svg viewBox="0 0 60 100">
           <defs>
             <linearGradient id="jersey" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#ffd558"/>
-              <stop offset="1" stop-color="#ff9f1c"/>
+              <stop offset="0" stop-color="#3a3f4c"/>
+              <stop offset="1" stop-color="#15171f"/>
+            </linearGradient>
+            <linearGradient id="glove" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2b2e38"/>
+              <stop offset="1" stop-color="#111319"/>
             </linearGradient>
           </defs>
           <ellipse cx="30" cy="92" rx="16" ry="4" fill="rgba(0,0,0,.35)"/>
-          <rect x="19" y="62" width="8" height="26" rx="4" fill="#151a26"/>
-          <rect x="33" y="62" width="8" height="26" rx="4" fill="#151a26"/>
-          <rect x="15" y="66" width="12" height="8" rx="3" fill="#0d0f16"/>
-          <rect x="33" y="66" width="12" height="8" rx="3" fill="#0d0f16"/>
-          <rect x="14" y="30" width="32" height="36" rx="12" fill="url(#jersey)"/>
-          <rect x="22" y="30" width="16" height="10" rx="4" fill="#ff9f1c"/>
-          <rect x="-2" y="28" width="26" height="11" rx="5.5" fill="url(#jersey)" transform="rotate(-18 11 33)"/>
-          <rect x="36" y="28" width="26" height="11" rx="5.5" fill="url(#jersey)" transform="rotate(18 49 33)"/>
-          <circle cx="4" cy="24" r="8" fill="#f4f6fb" stroke="#c7cdda" stroke-width="1.5"/>
-          <circle cx="56" cy="24" r="8" fill="#f4f6fb" stroke="#c7cdda" stroke-width="1.5"/>
-          <circle cx="30" cy="17" r="12" fill="#e7b98c"/>
-          <path d="M20 12 q10 -8 20 0" fill="none" stroke="#3a2416" stroke-width="3" stroke-linecap="round"/>
+          <!-- ساق‌ها و کفش -->
+          <rect x="19" y="62" width="8" height="24" rx="3" fill="#0d0f16"/>
+          <rect x="33" y="62" width="8" height="24" rx="3" fill="#0d0f16"/>
+          <rect x="15" y="65" width="12" height="7" rx="3" fill="#000"/>
+          <rect x="33" y="65" width="12" height="7" rx="3" fill="#000"/>
+          <rect x="14" y="82" width="13" height="6" rx="3" fill="#050608"/>
+          <rect x="33" y="82" width="13" height="6" rx="3" fill="#050608"/>
+          <!-- شورت -->
+          <rect x="17" y="56" width="26" height="12" rx="4" fill="#101319"/>
+          <!-- پیراهن -->
+          <rect x="14" y="28" width="32" height="32" rx="11" fill="url(#jersey)"/>
+          <path d="M22 30 L30 42 L38 30" fill="none" stroke="#565c6e" stroke-width="2" opacity=".6"/>
+          <!-- دست‌ها -->
+          <rect x="-2" y="26" width="26" height="10.5" rx="5" fill="url(#jersey)" transform="rotate(-16 11 31)"/>
+          <rect x="36" y="26" width="26" height="10.5" rx="5" fill="url(#jersey)" transform="rotate(16 49 31)"/>
+          <!-- دستکش‌ها -->
+          <circle cx="4" cy="23" r="8.5" fill="url(#glove)" stroke="#4a4f5c" stroke-width="1.2"/>
+          <rect x="1" y="18" width="6" height="4" rx="1.5" fill="#eceef2"/>
+          <circle cx="56" cy="23" r="8.5" fill="url(#glove)" stroke="#4a4f5c" stroke-width="1.2"/>
+          <rect x="53" y="18" width="6" height="4" rx="1.5" fill="#eceef2"/>
+          <!-- سر (چهره‌ی جنریک، بدون هویت خاص) -->
+          <circle cx="30" cy="17" r="11.5" fill="#caa377"/>
+          <path d="M19 13 q11 -11 22 0 q-1 -8 -11 -8 q-10 0 -11 8 Z" fill="#1c1a19"/>
         </svg>
       </div>
 
@@ -387,7 +482,16 @@
   </div>
 
   <div class="footer-hint">امتیازت به‌صورت خودکار روی حساب تلگرامت ذخیره می‌شه</div>
+  <button class="share-btn" id="shareBtn">🔗 اشتراک‌گذاری امتیاز</button>
   <div class="creator-credit">ساخته‌شده توسط <span>امیررضا زارعی</span></div>
+</div>
+
+<div class="achv-banner" id="achvBanner">
+  <div class="achv-icon" id="achvIcon">🏅</div>
+  <div class="achv-text">
+    <div class="t1" id="achvTitle">مدال برنزی!</div>
+    <div class="t2" id="achvSub">۱۰ برد پیاپی</div>
+  </div>
 </div>
 
 <div class="result-banner" id="resultBanner">
@@ -407,6 +511,15 @@
     try { tg.setBackgroundColor('#05070d'); } catch(e){}
   }
 
+  // شب/روز تصادفی برای تنوع بصری
+  if (Math.random() < 0.5) document.body.classList.add("night");
+
+  // صفحه‌ی بارگذاری اولیه (مستقل از لود فونت/اسکریپت‌های خارجی)
+  setTimeout(function(){
+    var sp = document.getElementById("splash");
+    if (sp) sp.classList.add("hide");
+  }, 900);
+
   function haptic(type, style){
     if (!tg || !tg.HapticFeedback) return;
     try{
@@ -414,6 +527,42 @@
       if (type === 'notification') tg.HapticFeedback.notificationOccurred(style || 'success');
       if (type === 'selection') tg.HapticFeedback.selectionChanged();
     }catch(e){}
+  }
+
+  // ---------------- صداهای ساخته‌شده با Web Audio (بدون فایل خارجی) ----------------
+  var actx = null;
+  function getCtx(){
+    if (!actx){
+      try{ actx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ actx = false; }
+    }
+    return actx || null;
+  }
+  function tone(freq, dur, type, startGain){
+    var ctx = getCtx();
+    if (!ctx) return;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = type || "sine";
+    osc.frequency.value = freq;
+    gain.gain.value = startGain || 0.08;
+    osc.connect(gain); gain.connect(ctx.destination);
+    var now = ctx.currentTime;
+    gain.gain.setValueAtTime(gain.gain.value, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+    osc.start(now);
+    osc.stop(now + dur);
+  }
+  function soundKick(){ tone(180, 0.12, "square", 0.09); }
+  function soundGoal(){
+    [523, 659, 784, 1046].forEach(function(f, i){
+      setTimeout(function(){ tone(f, 0.28, "triangle", 0.07); }, i * 80);
+    });
+  }
+  function soundSave(){ tone(140, 0.35, "sawtooth", 0.08); }
+  function soundAchv(){
+    [660, 880, 1108].forEach(function(f, i){
+      setTimeout(function(){ tone(f, 0.3, "sine", 0.07); }, i * 100);
+    });
   }
 
   // ---------------- Storage (CloudStorage with localStorage fallback) ----------------
@@ -468,6 +617,31 @@
   var zoneButtons = Array.prototype.slice.call(document.querySelectorAll(".zone-btn"));
   var btnModeShoot = $("btnModeShoot");
   var btnModeSave = $("btnModeSave");
+  var pitchWrap = document.querySelector(".pitch-wrap");
+  var shareBtn = $("shareBtn");
+  var achvBanner = $("achvBanner");
+  var achvIcon = $("achvIcon");
+  var achvTitle = $("achvTitle");
+  var achvSub = $("achvSub");
+
+  var ACHIEVEMENTS = [
+    {n:5,  icon:"🥉", title:"مدال برنزی!", sub:"۵ برد پیاپی"},
+    {n:10, icon:"🥈", title:"مدال نقره‌ای!", sub:"۱۰ برد پیاپی"},
+    {n:25, icon:"🥇", title:"مدال طلایی!", sub:"۲۵ برد پیاپی"},
+    {n:50, icon:"💎", title:"الماس!", sub:"۵۰ برد پیاپی"},
+    {n:100,icon:"👑", title:"افسانه‌ای!", sub:"۱۰۰ برد پیاپی"}
+  ];
+  function checkAchievement(streak){
+    var a = ACHIEVEMENTS.filter(function(x){ return x.n === streak; })[0];
+    if (!a) return;
+    achvIcon.textContent = a.icon;
+    achvTitle.textContent = a.title;
+    achvSub.textContent = a.sub;
+    achvBanner.classList.add("show");
+    soundAchv();
+    haptic("notification", "success");
+    setTimeout(function(){ achvBanner.classList.remove("show"); }, 1900);
+  }
 
   function renderScoreboard(){
     var d = state.data[state.mode];
@@ -514,18 +688,31 @@
     return ZONES[Math.floor(Math.random() * 3)];
   }
 
+  // سختی پیش‌رونده: هرچی رکورد پیاپی فعلی بیشتر باشه، حریف باهوش‌تر عمل می‌کنه
+  function opponentZone(playerZone, streak){
+    var matchChance = Math.min(0.33 + streak * 0.025, 0.62);
+    var wantsMatch = Math.random() < matchChance;
+    if (wantsMatch) return playerZone;
+    var others = ZONES.filter(function(z){ return z !== playerZone; });
+    return others[Math.floor(Math.random() * others.length)];
+  }
+
   function playRound(zone){
     if (state.busy) return;
     state.busy = true;
     haptic("impact", "light");
+    soundKick();
+    pitchWrap.classList.add("zoom");
+    setTimeout(function(){ pitchWrap.classList.remove("zoom"); }, 260);
 
     zoneButtons.forEach(function(b){
       b.disabled = true;
       if (b.getAttribute("data-zone") === zone) b.classList.add("picked");
     });
 
-    var oppZone = randomZone();
     var mode = state.mode;
+    var curStreak = state.data[mode].streak;
+    var oppZone = opponentZone(zone, curStreak);
     var shotZone, keeperZone, won;
 
     if (mode === "shoot"){
@@ -556,10 +743,12 @@
   function finishRound(mode, won, result){
     var d = state.data[mode];
     d.played += 1;
+    var newStreak = false;
     if (won){
       d.score += 1;
       d.streak += 1;
       d.best = Math.max(d.best, d.streak);
+      newStreak = d.streak;
     } else {
       d.streak = 0;
     }
@@ -581,8 +770,10 @@
     resultBanner.classList.add("show");
 
     haptic("notification", won ? "success" : "error");
-    if (won) burstConfetti();
-    else shakeScreen();
+    if (won){ burstConfetti(); soundGoal(); }
+    else { shakeScreen(); soundSave(); }
+
+    if (newStreak) checkAchievement(newStreak);
 
     setTimeout(function(){
       resultBanner.classList.remove("show");
@@ -657,6 +848,22 @@
     requestAnimationFrame(tickConfetti);
   }
   requestAnimationFrame(tickConfetti);
+
+  // ---------------- اشتراک‌گذاری امتیاز ----------------
+  shareBtn.addEventListener("click", function(){
+    var d = state.data[state.mode];
+    var modeLabel = state.mode === "shoot" ? "زدن پنالتی" : "گرفتن پنالتی";
+    var text = "⚽ توی چالش پنالتی، حالت " + modeLabel + " امتیاز " + d.score +
+      " گرفتم و رکورد پیاپیم " + d.best + " شد! تو هم امتحان کن 👇";
+    var pageUrl = window.location.href;
+    var shareUrl = "https://t.me/share/url?url=" + encodeURIComponent(pageUrl) +
+      "&text=" + encodeURIComponent(text);
+    haptic("selection");
+    if (tg && tg.openTelegramLink){
+      try{ tg.openTelegramLink(shareUrl); return; }catch(e){}
+    }
+    window.open(shareUrl, "_blank");
+  });
 
   // ---------------- Init ----------------
   loadMode("shoot");
